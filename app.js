@@ -1,5 +1,9 @@
 'use strict';
 
+if(process.env.NODE_ENV !== 'production'){
+  require('dotenv').config();
+}
+
 const cors = require('cors');
 const users = require('./routes/users');
 const courses = require('./routes/courses');
@@ -13,7 +17,7 @@ const app = express();
 
 app.use(express.json());
 
-mongoose.connect('mongodb://localhost', {useNewUrlParser: true});
+mongoose.connect( process.env.DATABASE_URL, {useNewUrlParser: true});
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {

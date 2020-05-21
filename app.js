@@ -39,23 +39,6 @@ app.get('/api', (req, res) => {
   });
 });
 
-/* Handler function to wrap each route. */
-function asyncHandler(cb){
-  return async(req, res, next) => {
-    try {
-      await cb(req, res, next)
-    } catch(error){
-        next(error)
-    }
-  }
-}
-
-app.get('/api/coursess', asyncHandler(async (req, res) => {
-  const courses = await Course.find();
-  res.status(200).json({ courses: courses });
-}));
-
-
 // send 404 if no other route matched
 app.use((req, res) => {
   res.status(404).json({

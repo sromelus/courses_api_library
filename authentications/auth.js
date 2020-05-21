@@ -21,7 +21,7 @@ const authenticateUser = async(req, res, next) => {
   const credentials = auth(req);
 
   if(credentials){
-
+    
     const users = await User.find();
 
     const user = users.find(user => user.emailAddress === credentials.name);

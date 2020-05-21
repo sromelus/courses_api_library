@@ -9,6 +9,7 @@ const users = require('./routes/users');
 const courses = require('./routes/courses');
 const express = require('express');
 const mongoose = require('mongoose');
+const Course = require('./db/models/course');
 
 // variable to enable global error logging
 const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'true';
@@ -37,6 +38,23 @@ app.get('/api', (req, res) => {
     message: 'Welcome to the course REST API Express!',
   });
 });
+
+/* Handler function to wrap each route. */
+function asyncHandler(cb){
+  return async(req, res, next) => {
+    try {
+      await cb(req, res, next)
+    } catch(error){
+        next(error)
+    }
+  }
+}
+
+app.get('/api/coursess', asyncHandler(async (req, res) => {
+  const courses = await Course.find();
+  res.status(200).json({ courses: courses });
+}));
+
 
 // send 404 if no other route matched
 app.use((req, res) => {
